@@ -39,10 +39,10 @@ function NavbarUser() {
         </Nav>
         <Nav navbar>
           <NavItem>
-            <NavLink href="#"><i class="bi bi-person-circle"></i> Nama Pengguna</NavLink>
+            <NavLink href="#"><i className="bi bi-person-circle"></i> Nama Pengguna</NavLink>
           </NavItem>
           <NavItem>
-            <Button type="button" onClick={clickLogout} className="btn btn-dark btn-sm">Logout</Button>
+            <Button type="button" onClick={clickLogout} className="btn btn-dark ms-3">Logout</Button>
           </NavItem>
         </Nav>
       </Collapse>

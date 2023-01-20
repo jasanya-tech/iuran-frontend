@@ -1,14 +1,13 @@
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { iuranApi } from "../api/iuranApi";
 
 function Login() {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
+  const [validation, setValidation] = useState([]);
   const navigate = useNavigate();
 
-  const onSubmitForm = (e) => {
+  const onSubmitLogin = (e) => {
     const formData = new FormData(e.target)
 
     e.preventDefault();
@@ -20,9 +19,13 @@ function Login() {
     })
       .then(res => {
         console.log(res.data)
-        navigate(`/${res.data.user.role_name}/dashboard`);
+        localStorage.setItem('token', res.data.authorisation.token)
+        navigate(`/${res.data.user.role_name}/dashboard`)
       })
-      .catch(err => console.log(err.message.email));
+      .catch(error => {
+        console.log(error.response.data.message)
+        setValidation(error.response.data.message)
+      });
 
   };
 
@@ -34,7 +37,7 @@ function Login() {
 
           <div className="row">
             <div className="col justify-content-center">
-              <Form onSubmit={onSubmitForm}>
+              <Form onSubmit={onSubmitLogin}>
                 <FormGroup>
                   <Label for="email">
                     Email
@@ -42,12 +45,15 @@ function Login() {
                   <Input
                     id="email"
                     name="email"
-                    // value={email}
-                    // onChange={e => setEmail(e.target.value)}
                     placeholder="Masukkan email Anda ..."
                     type="email"
                   />
                 </FormGroup>
+                {
+                  validation.email && (
+                    <Alert color="danger">{validation.email[0]}</Alert>
+                  )
+                }
                 <FormGroup>
                   <Label for="password">
                     Password
@@ -55,12 +61,15 @@ function Login() {
                   <Input
                     id="password"
                     name="password"
-                    // value={password}
-                    // onChange={e => setPassword(e.target.value)}
                     placeholder="Masukkan password Anda ..."
                     type="password"
                   />
                 </FormGroup>
+                {
+                  validation.password && (
+                    <Alert color="danger">{validation.password[0]}</Alert>
+                  )
+                }
                 <br />
                 <Button type="submit" className="form-control btn btn-dark">
                   Login
